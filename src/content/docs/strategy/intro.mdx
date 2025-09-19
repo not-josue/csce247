@@ -14,6 +14,8 @@ In other words:
 - You encapsulate each "strategy" (algorithm/behavior) in its own class.
     
 - The client (game object) doesn’t need to know how the strategy works — just that it _uses one_.
+
+---
     
 
 ## Escape Room Example Scenario
@@ -30,6 +32,7 @@ Imagine you have puzzles in your escape room. Different puzzles might require di
   You want your game to handle these strategies **interchangeably**.
 </Aside>
 
+---
 
 ## Define the Strategy Interface
 
@@ -45,6 +48,7 @@ public interface PuzzleSolvingStrategy {
   This is the **contract** that all puzzle strategies must follow.
 </Aside>
 
+---
 
 ## Implement Concrete Strategies
 
@@ -78,6 +82,7 @@ public class LockPickingStrategy implements PuzzleSolvingStrategy {
   Each strategy defines its own unique solving approach.
 </Aside>
 
+---
 
 ## Create the Context
 
@@ -104,6 +109,8 @@ public class Puzzle {
 }
 ```
 
+---
+
 ## Using the Strategy in the Game
 
 ```java
@@ -124,6 +131,8 @@ public class EscapeRoomGame {
 }
 ```
 
+---
+
 ## Why is this Useful in a Game?
 
 - **Flexibility:** You can easily add new puzzle-solving strategies (e.g., "Laser Reflection Puzzle") without changing the core `Puzzle` class.
@@ -131,7 +140,8 @@ public class EscapeRoomGame {
 - **Reusability:** Each strategy is independent and can be reused across multiple puzzles.
     
 - **Maintainability:** Changes in one solving algorithm don’t affect others.
-    
+
+---    
 
 ## Next Step Ideas 💡
 

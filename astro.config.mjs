@@ -68,7 +68,14 @@ export default defineConfig({
         },
         {
           label: "Strategy Design",
-          items: [{ label: "Introduction", slug: "strategy/intro" }],
+          items: [{ label: "Strategy Intro", slug: "strategy/intro" }],
+        },
+        {
+          label: "Observer Design",
+          items: [
+            { label: "Observer Intro", slug: "observer/intro" },
+            { label: "Timer Example", slug: "observer/timer" },
+          ],
         },
       ],
     }),

@@ -1,0 +1,155 @@
+---
+title: Timer Observer Example
+description: A simple Java example demonstrating the Observer Pattern with a timer that notifies observers every second.
+---
+
+**Observer in action:** Imagine your escape room game has a countdown timer ticking in the background. Instead of hard-coding every reaction, the timer simply notifies observers — and each one decides how to respond.
+
+**Why it matters**: This keeps the timer focused only on time, while the UI, sound system, and game logic handle their own behaviors. Flexible. Decoupled. Easy to extend.
+
+## Scenario
+
+In your escape room:
+
+- A **Countdown Timer** runs in the background.
+    
+- Every second, the timer **notifies observers**.
+    
+- Observers could be:
+    
+    - **UI Clock** → shows time left on screen.
+        
+    - **Sound System** → plays warning beeps in the last 10 seconds.
+        
+    - **Game Logic** → locks the room if time runs out.
+        
+
+---
+
+## Timer (Subject)
+
+```java
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
+
+public class CountdownTimer implements Subject {
+    private List<Observer> observers = new ArrayList<>();
+    private int secondsRemaining;
+    private Timer timer;
+
+    public CountdownTimer(int seconds) {
+        this.secondsRemaining = seconds;
+    }
+
+    @Override
+    public void addObserver(Observer observer) {
+        observers.add(observer);
+    }
+
+    @Override
+    public void removeObserver(Observer observer) {
+        observers.remove(observer);
+    }
+
+    @Override
+    public void notifyObservers(String event) {
+        for (Observer observer : observers) {
+            observer.update(event);
+        }
+    }
+
+    public void start() {
+        timer = new Timer();
+        timer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                if (secondsRemaining > 0) {
+                    notifyObservers("Time left: " + secondsRemaining + "s");
+                    secondsRemaining--;
+                } else {
+                    notifyObservers("Time’s up!");
+                    timer.cancel();
+                }
+            }
+        }, 0, 1000); // every 1 second
+    }
+}
+
+```
+
+---
+
+## Timer Observers
+
+```java
+// Observer 1: UI
+public class GameUI implements Observer {
+    @Override
+    public void update(String event) {
+        if (event.startsWith("Time left")) {
+            System.out.println("[UI] " + event);
+        } else if (event.equals("Time’s up!")) {
+            System.out.println("[UI] GAME OVER!");
+        }
+    }
+}
+
+// Observer 2: Sound system
+public class SoundSystem implements Observer {
+    @Override
+    public void update(String event) {
+        if (event.startsWith("Time left: 10s")) {
+            System.out.println("[Sound] Beep beep! Hurry up!");
+        } else if (event.equals("Time’s up!")) {
+            System.out.println("[Sound] Alarm sound!!!");
+        }
+    }
+}
+```
+
+---
+
+## Using the Timer in the Game
+
+```java
+public class EscapeRoomGame {
+    public static void main(String[] args) {
+        CountdownTimer timer = new CountdownTimer(12); // 12-second game
+
+        GameUI ui = new GameUI();
+        SoundSystem sound = new SoundSystem();
+
+        timer.addObserver(ui);
+        timer.addObserver(sound);
+
+        timer.start();
+    }
+}
+```
+
+---
+
+## Sample Output
+
+```
+[UI] Time left: 12s
+[UI] Time left: 11s
+[UI] Time left: 10s
+[Sound] Beep beep! Hurry up!
+[UI] Time left: 9s
+...
+[UI] Time’s up!
+[Sound] Alarm sound!!!
+```
+
+---
+
+✅ **Why this works so well with Observer Pattern:**
+
+- The **Timer** just keeps track of time — it doesn’t care who’s watching.
+    
+- Observers (UI, sound, game logic) react independently.
+    
+- You can add/remove observers dynamically (e.g., multiple UIs for co-op players).

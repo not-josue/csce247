@@ -1,0 +1,220 @@
+---
+title: Observer Design Pattern
+description: Learn about the Observer Design Pattern, its benefits, and how to implement it in your code.
+---
+
+import { Aside } from '@astrojs/starlight/components';
+
+The **Observer Pattern** is a **behavioral design pattern** where:
+
+- An **object (subject)** maintains a list of dependents (**observers**).
+    
+- When the subject’s state changes, it **notifies all observers automatically**.
+    
+
+Think of it as a **subscription system**:
+
+- **Subject** = publisher (e.g., a puzzle or a timer in the escape room).
+    
+- **Observers** = subscribers (e.g., doors, traps, or players listening for changes).
+    
+
+---
+
+## Escape Room Example Scenario
+
+In an escape room:
+
+- Solving a puzzle (subject) might **trigger multiple reactions**:
+    
+    - A door opens.
+        
+    - A light turns on.
+        
+    - A trap is disabled.
+        
+<Aside type="caution" title='Key Idea' icon="star">
+  The **Observer Pattern** allows you to wire these together without hardcoding direct dependencies.
+</Aside>
+
+---
+
+## Define the Observer Interface
+
+```java
+// Observer interface
+public interface Observer {
+    void update(String event);
+}
+```
+<br/>
+<Aside type="caution" title='Key Idea' icon="star">
+  Observers just need to implement the `update` method.
+</Aside>
+
+---
+
+## Define the Subject Interface
+
+```java
+// Subject interface
+public interface Subject {
+    void addObserver(Observer observer);
+    void removeObserver(Observer observer);
+    void notifyObservers(String event);
+}
+```
+<br/>
+<Aside type="caution" title='Key Idea' icon="star">
+  The subject manages observers and notifies them of events.
+</Aside>
+
+---
+
+## Implement a Concrete Subject
+
+```java
+import java.util.ArrayList;
+import java.util.List;
+
+public class Puzzle implements Subject {
+    private List<Observer> observers = new ArrayList<>();
+    private boolean solved = false;
+
+    @Override
+    public void addObserver(Observer observer) {
+        observers.add(observer);
+    }
+
+    @Override
+    public void removeObserver(Observer observer) {
+        observers.remove(observer);
+    }
+
+    @Override
+    public void notifyObservers(String event) {
+        for (Observer observer : observers) {
+            observer.update(event);
+        }
+    }
+
+    public void solvePuzzle() {
+        solved = true;
+        System.out.println("Puzzle solved!");
+        notifyObservers("Puzzle solved");
+    }
+
+    public boolean isSolved() {
+        return solved;
+    }
+}
+```
+<br/>
+<Aside type="caution" title='Key Idea' icon="star">
+  Here, when the puzzle is solved, it notifies all observers.
+</Aside>
+
+
+---
+
+## Implement Concrete Observers
+
+```java
+import java.util.ArrayList;
+import java.util.List;
+
+public class Puzzle implements Subject {
+    private List<Observer> observers = new ArrayList<>();
+    private boolean solved = false;
+
+    @Override
+    public void addObserver(Observer observer) {
+        observers.add(observer);
+    }
+
+    @Override
+    public void removeObserver(Observer observer) {
+        observers.remove(observer);
+    }
+
+    @Override
+    public void notifyObservers(String event) {
+        for (Observer observer : observers) {
+            observer.update(event);
+        }
+    }
+
+    public void solvePuzzle() {
+        solved = true;
+        System.out.println("Puzzle solved!");
+        notifyObservers("Puzzle solved");
+    }
+
+    public boolean isSolved() {
+        return solved;
+    }
+}
+
+```
+<br/>
+<Aside type="caution" title='Key Idea' icon="star">
+  Each observer reacts differently to the event.
+</Aside>
+
+---
+
+## Using the Observer in the Game
+
+```java
+public class EscapeRoomGame {
+    public static void main(String[] args) {
+        Puzzle puzzle = new Puzzle();
+
+        // Create observers
+        Door door = new Door();
+        Light light = new Light();
+        Trap trap = new Trap();
+
+        // Subscribe them to puzzle events
+        puzzle.addObserver(door);
+        puzzle.addObserver(light);
+        puzzle.addObserver(trap);
+
+        // Solve puzzle
+        puzzle.solvePuzzle();
+        // Output:
+        // Puzzle solved!
+        // The door creaks open...
+        // The lights flicker on!
+        // The trap mechanism is disabled.
+    }
+}
+
+```
+
+---
+
+## Why is this Useful in a Game?
+
+- **Loose coupling:** Puzzle doesn’t need to know what happens after solving — it just notifies.
+    
+- **Flexibility:** You can add/remove observers at runtime.
+    
+- **Reusability:** Same observer (e.g., `Light`) could listen to different subjects (multiple puzzles).
+    
+
+---
+
+## Next Step Ideas 💡
+
+- Add a **Timer** subject that notifies observers (e.g., “Time’s up!” → lock doors).
+    
+- Allow **players** to be observers (notified when something changes).
+    
+- Combine with **Strategy Pattern** so puzzles have different solving strategies _and_ can notify observers when solved.
+    
+
+---
+
+✅ **Key Takeaway:**  
+The **Observer Pattern** makes your game reactive. Solving one puzzle can ripple through the room, triggering doors, lights, or traps **without hardcoding dependencies**.
