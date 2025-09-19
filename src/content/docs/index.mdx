@@ -1,12 +1,14 @@
 ---
-title: Welcome to Starlight
-description: Get started building your docs site with Starlight.
+title: Home
+description: Learn Java Design Patterns taught in CSCE 247 at the University of South Carolina.
 template: splash
 lastUpdated: true
 hero:
-  tagline: Congrats on setting up a new Starlight project!
+  title: Software Engineering
+  tagline: Learn Java Design Patterns and how to apply them in your projects.
   image:
-    file: ../../assets/houston.webp
+    dark: ../../assets/design-pattern-dark.webp
+    light: ../../assets/design-pattern-light.webp
   actions:
     - text: Get Started
       link: /guides/example/
@@ -15,19 +17,37 @@ hero:
 
 import { Card, CardGrid } from '@astrojs/starlight/components';
 
-## Next steps
+<h2 class="my-16">Design Patterns</h2>
 
 <CardGrid stagger>
-	<Card title="Update content" icon="pencil">
-		Edit `src/content/docs/index.mdx` to see this page change.
+	<Card title="Strategy Design Pattern" icon="seti:notebook">
+		Defines a family of algorithms, encapsulates each one, and lets you swap them at runtime without changing the client code.
 	</Card>
-	<Card title="Add new content" icon="add-document">
-		Add Markdown or MDX files to `src/content/docs` to create new pages.
+	<Card title="Observer Design Pattern" icon="magnifier">
+		Establishes a one-to-many dependency so when one object's state changes, all its dependents are automatically notified and updated.
 	</Card>
-	<Card title="Configure your site" icon="setting">
-		Edit your `sidebar` and other config in `astro.config.mjs`.
+	<Card title="Decorator Design Pattern" icon="seti:stylelint">
+		Dynamically adds new behaviors or responsibilities to objects without altering their underlying structure.
 	</Card>
-	<Card title="Read the docs" icon="open-book">
-		Learn more in [the Starlight Docs](https://starlight.astro.build/).
+	<Card title="State Design Pattern" icon="homebrew">
+		Allows an object to change its behavior when its internal state changes, appearing as if it has switched class.
+	</Card>
+	<Card title="Factory Design Pattern" icon="seti:bicep">
+		Provides an interface for creating objects without specifying their concrete implementation.
+	</Card>
+	<Card title="Singleton Design Pattern" icon="laptop">
+		Ensures a class has only one instance and provides a global point of access to it.
+	</Card>
+	<Card title="Facade Design Pattern" icon="seti:ignored">
+		Offers a simplified, unified interface to a complex subsystem, hiding its internal details.
+	</Card>
+	<Card title="Iterator Design Pattern" icon="random">
+		Provides a way to access elements of a collection sequentially without exposing its underlying representation.
 	</Card>
 </CardGrid>
+
+<footer class="mt-32">
+	<p class="text-center text-sm text-muted-foreground">
+		Code is <a aria-label="view code license" target="_blank" href="#">MIT Licensed</a> and made with ❤️ by <a aria-label="view not-josue's github profile" href="https://github.com/not-josue" target="_blank">Not Josue</a>.
+	</p>
+</footer>

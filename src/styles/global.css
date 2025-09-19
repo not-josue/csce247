@@ -3,12 +3,14 @@
 @import '@astrojs/starlight-tailwind';
 @import 'tailwindcss/theme.css' layer(theme);
 @import 'tailwindcss/utilities.css' layer(utilities);
+@import '@fontsource/poppins';
+@import '@fontsource/fira-code';
 
 @theme {
     /* Your preferred text font. Starlight uses a system font stack by default. */
-    --font-sans: 'Atkinson Hyperlegible';
+    --font-sans: 'Poppins';
     /* Your preferred code font. Starlight uses system monospace fonts by default. */
-    --font-mono: 'IBM Plex Mono';
+    --font-mono: 'Fira Code';
     /* Your preferred accent color. Indigo is closest to Starlight’s defaults. */
     --color-accent-50: var(--color-orange-50);
     --color-accent-100: var(--color-orange-100);

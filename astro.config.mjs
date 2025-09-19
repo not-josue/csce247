@@ -11,12 +11,51 @@ export default defineConfig({
   integrations: [
     starlight({
       customCss: ["./src/styles/global.css"],
-      title: "My Docs",
+      title: "CSCE 247",
+      favicon: "/favicon.ico",
+      logo: {
+        light: "./src/assets/logos/logo-light.svg",
+        dark: "./src/assets/logos/logo-dark.svg",
+        alt: "CSCE 247 Logo",
+      },
+      head: [
+        // Favicons
+        {
+          tag: "meta",
+          attrs: {
+            rel: "apple-touch-icon",
+            href: "/favicons/apple-touch-icon.png",
+          },
+        },
+        {
+          tag: "meta",
+          attrs: {
+            rel: "icon",
+            sizes: "32x32",
+            href: "/favicons/favicon-32x32.png",
+          },
+        },
+        {
+          tag: "meta",
+          attrs: {
+            rel: "icon",
+            sizes: "16x16",
+            href: "/favicons/favicon-16x16.png",
+          },
+        },
+        {
+          tag: "meta",
+          attrs: {
+            rel: "manifest",
+            href: "/favicons/site.webmanifest",
+          },
+        },
+      ],
       social: [
         {
           icon: "github",
           label: "GitHub",
-          href: "https://github.com/withastro/starlight",
+          href: "https://github.com/not-josue/csce247",
         },
       ],
       sidebar: [
