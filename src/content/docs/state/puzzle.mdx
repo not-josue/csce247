@@ -1,0 +1,118 @@
+---
+title: 🧩 Puzzle State Example
+description: Example of using the State Pattern to manage puzzle states in a game.
+---
+
+import { Aside } from '@astrojs/starlight/components';
+
+**State in action:** Not every puzzle is just solved or unsolved — some have phases. A player might start it, make progress, then finally crack it.
+
+**Why it matters:** Instead of messy if checks, each state gets its own class, making puzzle logic clean, extensible, and easy to follow.
+
+## Scenario
+
+A puzzle in the escape room isn’t just “solved or unsolved.”  
+It might have **progression**:
+
+- **Unsolved** → Player hasn’t interacted yet.
+    
+- **In Progress** → Player made progress (entered part of the code, found part of the clue).
+    
+- **Solved** → Puzzle is complete.
+    
+
+Instead of tracking this with a boolean or lots of `if` statements, we give each state its own class.
+
+---
+
+## PuzzleState Interface
+
+```java
+public interface PuzzleState {
+    void interact(Puzzle puzzle);
+}
+```
+
+---
+
+## Concrete States
+
+```java
+// Unsolved state
+public class UnsolvedState implements PuzzleState {
+    @Override
+    public void interact(Puzzle puzzle) {
+        System.out.println("You start working on the puzzle...");
+        puzzle.setState(new InProgressState());
+    }
+}
+
+// In progress state
+public class InProgressState implements PuzzleState {
+    @Override
+    public void interact(Puzzle puzzle) {
+        System.out.println("You're making progress on the puzzle...");
+        puzzle.setState(new SolvedState());
+    }
+}
+
+// Solved state
+public class SolvedState implements PuzzleState {
+    @Override
+    public void interact(Puzzle puzzle) {
+        System.out.println("The puzzle is already solved!");
+    }
+}
+```
+
+---
+
+## Puzzle Context
+
+```java
+public class Puzzle {
+    private PuzzleState state;
+
+    public Puzzle() {
+        this.state = new UnsolvedState();
+    }
+
+    public void setState(PuzzleState state) {
+        this.state = state;
+    }
+
+    public void interact() {
+        state.interact(this);
+    }
+}
+```
+
+---
+
+## Using the Puzzle State
+
+```java
+public class EscapeRoomGame {
+    public static void main(String[] args) {
+        Puzzle puzzle = new Puzzle();
+
+        puzzle.interact(); // "You start working on the puzzle..."
+        puzzle.interact(); // "You're making progress on the puzzle..."
+        puzzle.interact(); // "The puzzle is already solved!"
+    }
+}
+```
+
+---
+
+## Sample Output
+
+```
+You start working on the puzzle...
+You're making progress on the puzzle...
+The puzzle is already solved!
+```
+<br/>
+<Aside type="caution" title='Key Idea' icon="star">
+  You could expand this with states like _FailedState_ (player gave wrong answer) or _LockedState_ (puzzle can’t be attempted yet).
+</Aside>

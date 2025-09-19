@@ -1,0 +1,201 @@
+---
+title: 🎲 State Design Pattern
+description: Learn about the State Design Pattern, its benefits, and how to implement it in your code.
+---
+
+import { Aside } from '@astrojs/starlight/components';
+
+The **State Design Pattern** is a **behavioral pattern** where:
+
+- An object’s behavior **changes depending on its internal state**.
+    
+- Instead of using giant `if/else` or `switch` statements, each **state is encapsulated in its own class**.
+    
+- The object (called **Context**) delegates behavior to the current **State**
+    
+<Aside type="caution" title='Key Idea' icon="star">
+  Think of it like a **finite state machine**: different states = different behaviors.
+</Aside>
+
+
+---
+
+## Escape Room Example Scenario
+
+Imagine a **Door** in your escape room:
+
+- A door can be **Locked**, **Unlocked**, or **Open**.
+    
+- Depending on its state:
+    
+    - If **Locked**, you can’t open it.
+        
+    - If **Unlocked**, you can open it.
+        
+    - If **Open**, you can’t unlock it anymore.
+        
+
+We’ll model this with the **State Pattern**.
+
+---
+
+## State Interface
+
+```java
+// State interface
+public interface DoorState {
+    void unlock(Door door);
+    void open(Door door);
+    void lock(Door door);
+}
+```
+
+---
+
+## Concrete States
+
+```java
+// Locked State
+public class LockedState implements DoorState {
+    @Override
+    public void unlock(Door door) {
+        System.out.println("You unlocked the door.");
+        door.setState(new UnlockedState());
+    }
+
+    @Override
+    public void open(Door door) {
+        System.out.println("The door is locked. You can't open it.");
+    }
+
+    @Override
+    public void lock(Door door) {
+        System.out.println("The door is already locked.");
+    }
+}
+
+// Unlocked State
+public class UnlockedState implements DoorState {
+    @Override
+    public void unlock(Door door) {
+        System.out.println("The door is already unlocked.");
+    }
+
+    @Override
+    public void open(Door door) {
+        System.out.println("You opened the door.");
+        door.setState(new OpenState());
+    }
+
+    @Override
+    public void lock(Door door) {
+        System.out.println("You locked the door again.");
+        door.setState(new LockedState());
+    }
+}
+
+// Open State
+public class OpenState implements DoorState {
+    @Override
+    public void unlock(Door door) {
+        System.out.println("The door is already open.");
+    }
+
+    @Override
+    public void open(Door door) {
+        System.out.println("The door is already open.");
+    }
+
+    @Override
+    public void lock(Door door) {
+        System.out.println("You closed and locked the door.");
+        door.setState(new LockedState());
+    }
+}
+```
+
+---
+
+## Context Class
+
+```java
+public class Door {
+    private DoorState state;
+
+    public Door() {
+        // Start with locked door
+        this.state = new LockedState();
+    }
+
+    public void setState(DoorState state) {
+        this.state = state;
+    }
+
+    public void unlock() {
+        state.unlock(this);
+    }
+
+    public void open() {
+        state.open(this);
+    }
+
+    public void lock() {
+        state.lock(this);
+    }
+}
+```
+
+---
+
+## Using the State Pattern in the Game
+
+```java
+public class EscapeRoomGame {
+    public static void main(String[] args) {
+        Door door = new Door();
+
+        door.open();   // "The door is locked. You can't open it."
+        door.unlock(); // "You unlocked the door."
+        door.open();   // "You opened the door."
+        door.lock();   // "You closed and locked the door."
+    }
+}
+```
+
+---
+
+## Sample Output
+
+```
+The door is locked. You can't open it.
+You unlocked the door.
+You opened the door.
+You closed and locked the door.
+```
+
+---
+
+## Why is this Useful in a Game?
+
+- **Encapsulation of behavior:** Each state has its own logic → no giant `if-else`.
+    
+- **Dynamic behavior:** The same method call (`door.open()`) does different things depending on state.
+    
+- **Extensibility:** Adding a new state (e.g., "BrokenDoorState") is easy.
+    
+
+---
+
+## Next Step Ideas 💡
+
+- Add a **Puzzle State** (e.g., _unsolved_, _partially solved_, _solved_).
+    
+- Add a **Game State** (e.g., _playing_, _paused_, _game over_).
+    
+- Combine with **Observer Pattern** so state changes notify other parts of the game.
+    
+
+---
+
+✅ **Key Takeaway:**  
+The **State Pattern** is like giving each state its own brain. Instead of your context object managing tons of conditions, it simply asks its current state: _“What do I do now?”_

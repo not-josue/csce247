@@ -1,0 +1,127 @@
+---
+title: 🎮 Game State Example
+description: An example of using the State Design Pattern to manage game states.
+---
+
+**State in action:** Your game isn’t always running — sometimes it’s paused, sometimes it’s over. Each mode changes how the game behaves.
+
+**Why it matters:** Instead of scattering if (paused) checks through your code, the State Pattern lets the current state decide what happens — making game logic clean, modular, and easy to expand.
+
+## Scenario
+
+The entire **game** has states:
+
+- **Playing** → normal gameplay.
+    
+- **Paused** → input frozen, timer stopped.
+    
+- **Game Over** → no more actions possible.
+    
+
+Again, the State Pattern makes this clean and extensible.
+
+---
+
+## GameState Interface
+
+```java
+public interface GameState {
+    void handle(Game game);
+}
+```
+
+---
+
+## Concrete States
+
+```java
+// Playing state
+public class PlayingState implements GameState {
+    @Override
+    public void handle(Game game) {
+        System.out.println("The game is running...");
+    }
+}
+
+// Paused state
+public class PausedState implements GameState {
+    @Override
+    public void handle(Game game) {
+        System.out.println("The game is paused.");
+    }
+}
+
+// Game Over state
+public class GameOverState implements GameState {
+    @Override
+    public void handle(Game game) {
+        System.out.println("Game over! Thanks for playing.");
+    }
+}
+```
+
+---
+
+## Game Context
+
+```java
+public class Game {
+    private GameState state;
+
+    public Game() {
+        this.state = new PlayingState(); // default
+    }
+
+    public void setState(GameState state) {
+        this.state = state;
+    }
+
+    public void update() {
+        state.handle(this);
+    }
+}
+```
+
+---
+
+## Using Game State
+
+```java
+public class EscapeRoomGame {
+    public static void main(String[] args) {
+        Game game = new Game();
+
+        game.update(); // "The game is running..."
+        game.setState(new PausedState());
+        game.update(); // "The game is paused."
+        game.setState(new GameOverState());
+        game.update(); // "Game over! Thanks for playing."
+    }
+}
+```
+
+---
+
+## Sample Output
+
+```
+The game is running...
+The game is paused.
+Game over! Thanks for playing.
+```
+
+---
+
+## Why is this Useful?
+
+- **Puzzle State:** Makes puzzles reactive and trackable — you can log progress, allow retries, or block access.
+    
+- **Game State:** Keeps game logic clean — instead of `if (paused)` checks everywhere, the current state decides what happens.
+    
+- **Extensible:** Adding states like _Victory_, _Tutorial_, or _Cutscene_ is straightforward.
+    
+
+---
+
+✅ **Key Takeaway:**  
+The **State Pattern** shines when you have **progression** (like puzzles) or **modes** (like the game itself). Each state gets its own class, keeping logic simple and modular.

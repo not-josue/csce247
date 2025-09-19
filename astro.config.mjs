@@ -77,6 +77,18 @@ export default defineConfig({
             { label: "Timer Example", slug: "observer/timer" },
           ],
         },
+        {
+          label: "Decorator Design",
+          items: [{ label: "Decorator Intro", slug: "decorator/intro" }],
+        },
+        {
+          label: "State Design",
+          items: [
+            { label: "State Intro", slug: "state/intro" },
+            { label: "Puzzle Example", slug: "state/puzzle" },
+            { label: "Game Example", slug: "state/game" },
+          ],
+        },
       ],
     }),
   ],

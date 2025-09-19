@@ -1,0 +1,192 @@
+---
+title: 🎭 Decorator Design Pattern
+description: Learn about the Decorator Design Pattern, its benefits, and how to implement it in your code.
+---
+
+The **Decorator Pattern** is a **structural design pattern** that lets you dynamically add behavior or responsibilities to objects **without modifying their class**.
+
+Think of it like **wrapping an object** in another object that extends its behavior:
+
+- The base object remains unchanged.
+    
+- You can "stack" multiple decorators to add new functionality at runtime.
+    
+
+---
+
+## Escape Room Example Scenario
+
+Imagine the **Player** character:
+
+- At the start, they can only perform **basic actions**.
+    
+- As they find **items** (like a flashlight, magnifying glass, lockpick), those items **enhance their abilities**.
+    
+- Instead of subclassing `Player` for every possible combination, we use **Decorator**.
+    
+
+---
+
+## Component Interface
+
+```java
+// The base component
+public interface Player {
+    void play();
+}
+```
+
+---
+
+## Concrete Component
+
+```java
+// A basic player with no extra items
+public class BasicPlayer implements Player {
+    @Override
+    public void play() {
+        System.out.println("Exploring the escape room...");
+    }
+}
+```
+
+---
+
+## Base Decorator
+
+```java
+// Abstract decorator - wraps a Player
+public abstract class PlayerDecorator implements Player {
+    protected Player decoratedPlayer;
+
+    public PlayerDecorator(Player player) {
+        this.decoratedPlayer = player;
+    }
+
+    @Override
+    public void play() {
+        decoratedPlayer.play(); // delegate to the wrapped player
+    }
+}
+```
+
+---
+
+## Concrete Decorators (Items / Enhancements)
+
+```java
+// Flashlight decorator
+public class FlashlightDecorator extends PlayerDecorator {
+    public FlashlightDecorator(Player player) {
+        super(player);
+    }
+
+    @Override
+    public void play() {
+        super.play();
+        System.out.println("Now you can see in dark areas with a flashlight.");
+    }
+}
+
+// Magnifying glass decorator
+public class MagnifyingGlassDecorator extends PlayerDecorator {
+    public MagnifyingGlassDecorator(Player player) {
+        super(player);
+    }
+
+    @Override
+    public void play() {
+        super.play();
+        System.out.println("You can inspect clues more closely with a magnifying glass.");
+    }
+}
+
+// Lockpick decorator
+public class LockpickDecorator extends PlayerDecorator {
+    public LockpickDecorator(Player player) {
+        super(player);
+    }
+
+    @Override
+    public void play() {
+        super.play();
+        System.out.println("You can pick locked doors and chests with a lockpick.");
+    }
+}
+```
+
+---
+
+## Using the Decorator in the Game
+
+```java
+public class EscapeRoomGame {
+    public static void main(String[] args) {
+        // Start with a basic player
+        Player player = new BasicPlayer();
+        player.play();
+        System.out.println("---");
+
+        // Player finds a flashlight
+        player = new FlashlightDecorator(player);
+        player.play();
+        System.out.println("---");
+
+        // Player finds a magnifying glass
+        player = new MagnifyingGlassDecorator(player);
+        player.play();
+        System.out.println("---");
+
+        // Player finds a lockpick too
+        player = new LockpickDecorator(player);
+        player.play();
+    }
+}
+```
+
+---
+
+## Sample Output
+
+```
+Exploring the escape room...
+---
+Exploring the escape room...
+Now you can see in dark areas with a flashlight.
+---
+Exploring the escape room...
+Now you can see in dark areas with a flashlight.
+You can inspect clues more closely with a magnifying glass.
+---
+Exploring the escape room...
+Now you can see in dark areas with a flashlight.
+You can inspect clues more closely with a magnifying glass.
+You can pick locked doors and chests with a lockpick.
+```
+
+---
+
+## Why is this Useful in a Game?
+
+- **Dynamic abilities:** Players gain powers without changing the core `Player` class.
+    
+- **Flexible stacking:** Any combination of items can be applied (flashlight + lockpick, etc.).
+    
+- **Open/closed principle:** You extend functionality without modifying existing code.
+    
+
+---
+
+## Next Step Ideas 💡
+
+- Make **items removable** (undo decorator).
+    
+- Add **time-limited decorators** (e.g., flashlight batteries run out).
+    
+- Combine with **Observer Pattern** so that when a player picks up an item, the decorator is automatically applied.
+    
+
+---
+
+✅ **Key Takeaway:**  
+The **Decorator Pattern** lets you dynamically “equip” your player (or other objects) with new behaviors, making it a natural fit for an escape room where players gain tools and abilities over time.
