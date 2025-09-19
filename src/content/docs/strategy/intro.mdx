@@ -1,0 +1,146 @@
+---
+title: Strategy Design Pattern
+description: Learn about the Strategy Design Pattern, its benefits, and how to implement it in your code.
+---
+
+import { Aside } from '@astrojs/starlight/components';
+
+The **Strategy Pattern** is a **behavioral design pattern** that allows you to define a family of algorithms, encapsulate them, and make them interchangeable at runtime.
+
+In other words:
+
+- Instead of hardcoding behavior, you can swap it dynamically.
+    
+- You encapsulate each "strategy" (algorithm/behavior) in its own class.
+    
+- The client (game object) doesn’t need to know how the strategy works — just that it _uses one_.
+    
+
+## Escape Room Example Scenario
+
+Imagine you have puzzles in your escape room. Different puzzles might require different **solving strategies**:
+
+- Cracking a **cipher puzzle**.
+    
+- Solving a **math riddle**.
+    
+- Picking a **lock**.
+
+<Aside type="caution" title='Key Idea' icon="star">
+  You want your game to handle these strategies **interchangeably**.
+</Aside>
+
+
+## Define the Strategy Interface
+
+```java
+// Strategy interface
+public interface PuzzleSolvingStrategy {
+    void solve();
+}
+```
+<br/>
+
+<Aside type="caution" title='Key Idea' icon="star">
+  This is the **contract** that all puzzle strategies must follow.
+</Aside>
+
+
+## Implement Concrete Strategies
+
+```java
+// Strategy 1: Cipher puzzle
+public class CipherPuzzleStrategy implements PuzzleSolvingStrategy {
+    @Override
+    public void solve() {
+        System.out.println("Decoding the secret cipher text...");
+    }
+}
+
+// Strategy 2: Math riddle puzzle
+public class MathRiddleStrategy implements PuzzleSolvingStrategy {
+    @Override
+    public void solve() {
+        System.out.println("Solving the math riddle with logic...");
+    }
+}
+
+// Strategy 3: Lock picking puzzle
+public class LockPickingStrategy implements PuzzleSolvingStrategy {
+    @Override
+    public void solve() {
+        System.out.println("Carefully picking the lock...");
+    }
+}
+```
+<br/>
+<Aside type="caution" title='Key Idea' icon="star">
+  Each strategy defines its own unique solving approach.
+</Aside>
+
+
+## Create the Context
+
+The **context** is the object that uses a strategy.  
+
+In our game, the **Puzzle** class can hold a strategy and delegate solving to it.
+
+```java
+public class Puzzle {
+    private PuzzleSolvingStrategy strategy;
+
+    // Inject strategy at runtime
+    public void setStrategy(PuzzleSolvingStrategy strategy) {
+        this.strategy = strategy;
+    }
+
+    public void attemptSolve() {
+        if (strategy == null) {
+            System.out.println("No solving strategy selected!");
+        } else {
+            strategy.solve();
+        }
+    }
+}
+```
+
+## Using the Strategy in the Game
+
+```java
+public class EscapeRoomGame {
+    public static void main(String[] args) {
+        Puzzle puzzle = new Puzzle();
+
+        // Switch strategies at runtime
+        puzzle.setStrategy(new CipherPuzzleStrategy());
+        puzzle.attemptSolve(); // "Decoding the secret cipher text..."
+
+        puzzle.setStrategy(new MathRiddleStrategy());
+        puzzle.attemptSolve(); // "Solving the math riddle with logic..."
+
+        puzzle.setStrategy(new LockPickingStrategy());
+        puzzle.attemptSolve(); // "Carefully picking the lock..."
+    }
+}
+```
+
+## Why is this Useful in a Game?
+
+- **Flexibility:** You can easily add new puzzle-solving strategies (e.g., "Laser Reflection Puzzle") without changing the core `Puzzle` class.
+    
+- **Reusability:** Each strategy is independent and can be reused across multiple puzzles.
+    
+- **Maintainability:** Changes in one solving algorithm don’t affect others.
+    
+
+## Next Step Ideas 💡
+
+- Make players choose a strategy (input from the console).
+    
+- Assign puzzles dynamically with random strategies.
+    
+- Combine Strategy with **Factory Method** to generate puzzles.
+    
+
+✅ **Key Takeaway:**  
+The **Strategy Pattern** lets you encapsulate behaviors (solving puzzles) and swap them dynamically, making your escape room game extensible and maintainable.

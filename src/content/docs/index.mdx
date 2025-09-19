@@ -11,13 +11,13 @@ hero:
     light: ../../assets/design-pattern-light.webp
   actions:
     - text: Get Started
-      link: /guides/example/
+      link: /getting-started/intro
       icon: right-arrow
 ---
 
-import { Card, CardGrid } from '@astrojs/starlight/components';
+import { Badge, Card, CardGrid } from '@astrojs/starlight/components';
 
-<h2 class="my-16">Design Patterns</h2>
+<h2 class="my-16">Design Patterns <Badge class='font-mono' text="Escape Room Edition" variant="danger" /></h2>
 
 <CardGrid stagger>
 	<Card title="Strategy Design Pattern" icon="seti:notebook">
@@ -48,6 +48,6 @@ import { Card, CardGrid } from '@astrojs/starlight/components';
 
 <footer class="mt-32">
 	<p class="text-center text-sm text-muted-foreground">
-		Code is <a aria-label="view code license" target="_blank" href="#">MIT Licensed</a> and made with ❤️ by <a aria-label="view not-josue's github profile" href="https://github.com/not-josue" target="_blank">Not Josue</a>.
+		Code is <a aria-label="view code license" target="_blank" href="https://github.com/not-josue/csce247/blob/main/LICENSE">MIT Licensed</a> and made with ❤️ by <a aria-label="view not-josue's github profile" href="https://github.com/not-josue" target="_blank">Not Josue</a>.
 	</p>
 </footer>

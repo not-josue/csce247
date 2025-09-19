@@ -60,15 +60,15 @@ export default defineConfig({
       ],
       sidebar: [
         {
-          label: "Guides",
+          label: "Getting Started",
           items: [
             // Each item here is one entry in the navigation menu.
-            { label: "Example Guide", slug: "guides/example" },
+            { label: "Getting Started", slug: "getting-started/intro" },
           ],
         },
         {
-          label: "Reference",
-          autogenerate: { directory: "reference" },
+          label: "Strategy Design",
+          items: [{ label: "Introduction", slug: "strategy/intro" }],
         },
       ],
     }),
