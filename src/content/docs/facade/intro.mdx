@@ -1,0 +1,188 @@
+---
+title: 🎭 Facade Design Pattern
+description: Learn about the Facade Design Pattern, its benefits, and how to implement it in your code.
+---
+
+import { Aside } from '@astrojs/starlight/components';
+
+The **Facade Pattern** is a **structural design pattern** that:
+
+- Provides a **simplified interface** to a complex subsystem.
+    
+- Makes the system easier to use without exposing all the details.
+    
+<Aside type="caution" title='Key Idea' icon="star">
+  Think of it like a **front desk clerk at a hotel**: instead of talking to housekeeping, kitchen, and maintenance directly, you just talk to the clerk, and they coordinate everything.
+</Aside>
+
+---
+
+## Escape Room Example Scenario
+
+Your game might have subsystems like:
+
+- **PuzzleSystem** → handles puzzles.
+    
+- **ItemSystem** → manages inventory.
+    
+- **SoundSystem** → plays sound effects.
+    
+- **LightingSystem** → controls room lights.
+    
+<Aside type="caution" title='Key Idea' icon="star">
+  A player just wants to **start a room** or **solve a puzzle**, not micromanage all subsystems. That’s where a **Facade** comes in.
+</Aside>
+
+
+---
+
+## Subsystems
+
+```java
+// Puzzle system
+public class PuzzleSystem {
+    public void loadPuzzles() {
+        System.out.println("Puzzles loaded.");
+    }
+    public void solvePuzzle() {
+        System.out.println("Puzzle solved!");
+    }
+}
+
+// Item system
+public class ItemSystem {
+    public void loadItems() {
+        System.out.println("Items placed in the room.");
+    }
+    public void collectItem(String item) {
+        System.out.println("Collected: " + item);
+    }
+}
+
+// Sound system
+public class SoundSystem {
+    public void playBackgroundMusic() {
+        System.out.println("Background music playing...");
+    }
+    public void playVictorySound() {
+        System.out.println("Victory sound plays!");
+    }
+}
+
+// Lighting system
+public class LightingSystem {
+    public void turnOnLights() {
+        System.out.println("Lights are on.");
+    }
+    public void dimLights() {
+        System.out.println("Lights dimmed for suspense...");
+    }
+}
+```
+
+---
+
+## The Facade
+
+```java
+public class EscapeRoomFacade {
+    private PuzzleSystem puzzleSystem;
+    private ItemSystem itemSystem;
+    private SoundSystem soundSystem;
+    private LightingSystem lightingSystem;
+
+    public EscapeRoomFacade() {
+        this.puzzleSystem = new PuzzleSystem();
+        this.itemSystem = new ItemSystem();
+        this.soundSystem = new SoundSystem();
+        this.lightingSystem = new LightingSystem();
+    }
+
+    // Start the escape room
+    public void startGame() {
+        puzzleSystem.loadPuzzles();
+        itemSystem.loadItems();
+        soundSystem.playBackgroundMusic();
+        lightingSystem.turnOnLights();
+        System.out.println("Escape room started!");
+    }
+
+    // Solve a puzzle
+    public void solvePuzzle() {
+        puzzleSystem.solvePuzzle();
+        soundSystem.playVictorySound();
+        lightingSystem.dimLights();
+        System.out.println("Puzzle sequence complete.");
+    }
+
+    // Collect an item
+    public void collectItem(String item) {
+        itemSystem.collectItem(item);
+    }
+}
+```
+
+---
+
+## Using the Facade
+
+```java
+public class EscapeRoomGame {
+    public static void main(String[] args) {
+        EscapeRoomFacade escapeRoom = new EscapeRoomFacade();
+
+        // Player starts the game
+        escapeRoom.startGame();
+
+        // Player collects an item
+        escapeRoom.collectItem("Flashlight");
+
+        // Player solves a puzzle
+        escapeRoom.solvePuzzle();
+    }
+}
+```
+
+---
+
+## Sample Output
+
+```
+Puzzles loaded.
+Items placed in the room.
+Background music playing...
+Lights are on.
+Escape room started!
+Collected: Flashlight
+Puzzle solved!
+Victory sound plays!
+Lights dimmed for suspense...
+Puzzle sequence complete.
+```
+
+---
+
+## Why is Facade Useful in a Game?
+
+- **Simplifies usage** → Player just calls `startGame()` instead of juggling 4 subsystems.
+    
+- **Encapsulation** → Subsystems can change internally without affecting the main game logic.
+    
+- **Readability** → Your main game loop stays clean and easy to follow.
+    
+
+---
+
+## Next Step Ideas 💡
+
+- Add a **endGame()** method that shuts everything down (lights off, stop music, display results).
+    
+- Have different facades for different **room themes** (HauntedRoomFacade, VaultRoomFacade).
+    
+- Combine with **Factory Pattern** to generate facades dynamically based on room type.
+    
+
+---
+
+✅ **Key Takeaway:**  
+The **Facade Pattern** gives your escape room players (and your code) a **simple entry point** to a complex system, making the game much easier to manage and extend.

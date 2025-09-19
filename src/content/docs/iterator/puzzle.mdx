@@ -1,0 +1,175 @@
+---
+title: 🧩 Puzzle Iterator Example
+description: A practical example of the Iterator Pattern in a puzzle game context.
+---
+
+**Iterator in action:** Your escape room has multiple puzzles — ciphers, riddles, locks. Instead of hard-coding how to loop through them, an iterator gives you a clean, consistent way to play each one in order.
+
+**Why it matters:** The game doesn’t care how puzzles are stored — it just steps through them. That means flexible collections, easy extensions, and specialized iterators when you need them.
+
+## 1. Puzzle Interface
+
+Let’s reuse a simple `Puzzle` interface:
+
+```java
+public interface Puzzle {
+    void play();
+}
+```
+
+---
+
+## 2. Concrete Puzzles
+
+```java
+public class CipherPuzzle implements Puzzle {
+    @Override
+    public void play() {
+        System.out.println("Decoding a secret cipher...");
+    }
+}
+
+public class RiddlePuzzle implements Puzzle {
+    @Override
+    public void play() {
+        System.out.println("Solving a tricky riddle...");
+    }
+}
+
+public class LockPuzzle implements Puzzle {
+    @Override
+    public void play() {
+        System.out.println("Trying to unlock the door...");
+    }
+}
+```
+
+---
+
+## 3. Iterator Interface
+
+```java
+public interface Iterator<T> {
+    boolean hasNext();
+    T next();
+}
+```
+
+---
+
+## 4. Aggregate Interface
+
+```java
+public interface Aggregate<T> {
+    Iterator<T> createIterator();
+}
+```
+
+---
+
+## 5. PuzzleCollection (Concrete Aggregate)
+
+```java
+import java.util.ArrayList;
+import java.util.List;
+
+public class PuzzleCollection implements Aggregate<Puzzle> {
+    private List<Puzzle> puzzles = new ArrayList<>();
+
+    public void addPuzzle(Puzzle puzzle) {
+        puzzles.add(puzzle);
+    }
+
+    @Override
+    public Iterator<Puzzle> createIterator() {
+        return new PuzzleIterator(puzzles);
+    }
+}
+```
+
+---
+
+## 6. PuzzleIterator (Concrete Iterator)
+
+```java
+import java.util.List;
+
+public class PuzzleIterator implements Iterator<Puzzle> {
+    private List<Puzzle> puzzles;
+    private int position = 0;
+
+    public PuzzleIterator(List<Puzzle> puzzles) {
+        this.puzzles = puzzles;
+    }
+
+    @Override
+    public boolean hasNext() {
+        return position < puzzles.size();
+    }
+
+    @Override
+    public Puzzle next() {
+        return puzzles.get(position++);
+    }
+}
+```
+
+---
+
+## 7. Using Puzzle Collection in the Game
+
+```java
+public class EscapeRoomGame {
+    public static void main(String[] args) {
+        PuzzleCollection puzzleCollection = new PuzzleCollection();
+
+        puzzleCollection.addPuzzle(new CipherPuzzle());
+        puzzleCollection.addPuzzle(new RiddlePuzzle());
+        puzzleCollection.addPuzzle(new LockPuzzle());
+
+        Iterator<Puzzle> puzzleIterator = puzzleCollection.createIterator();
+
+        while (puzzleIterator.hasNext()) {
+            Puzzle puzzle = puzzleIterator.next();
+            puzzle.play();
+        }
+    }
+}
+```
+
+---
+
+## 8. Sample Output
+
+```
+Decoding a secret cipher...
+Solving a tricky riddle...
+Trying to unlock the door...
+```
+
+---
+
+## 9. Why is This Useful?
+
+- **Encapsulation** → The client (`EscapeRoomGame`) doesn’t care whether puzzles are stored in an `ArrayList`, `LinkedList`, or even loaded dynamically.
+    
+- **Flexibility** → You can easily add new puzzles to the collection.
+    
+- **Extensibility** → You could create specialized iterators (e.g., _only unsolved puzzles_).
+    
+
+---
+
+## 10. Next Step Ideas 💡
+
+- Create a **ReversePuzzleIterator** to go through puzzles backwards.
+    
+- Add filtering (e.g., _iterate only over puzzles of a certain type_).
+    
+- Combine with the **State Pattern** so iterators skip already solved puzzles.
+    
+
+---
+
+✅ **Key Takeaway:**  
+A **Puzzle Collection** + **Iterator Pattern** gives you a clean way to manage and traverse puzzles in your escape room game, while keeping the logic decoupled from the storage details.

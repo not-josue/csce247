@@ -1,0 +1,187 @@
+---
+title: 🔁 Iterator Design Pattern
+description: Learn about the Iterator Design Pattern, its benefits, and how to implement it in your code.
+---
+
+import { Aside } from '@astrojs/starlight/components';
+
+## 1. What is the Iterator Pattern?
+
+The **Iterator Pattern** is a **behavioral design pattern** that:
+
+- Provides a way to **access elements of a collection sequentially**.
+    
+- Hides the underlying representation (array, list, etc.).
+    
+- Lets you traverse without exposing collection internals.
+    
+<Aside type="caution" title='Key Idea' icon="star">
+  TThink of it like **turning the pages of a book** — you don’t care if the book is made of paper or digital, you just flip page by page.
+</Aside>
+
+---
+
+## 2. Escape Room Example Scenario
+
+In your escape room:
+
+- The player has an **inventory** of items.
+    
+- You want to iterate through those items (to display them, use them, etc.).
+    
+- Instead of exposing raw data structures, we’ll use the **Iterator Pattern**.
+    
+
+---
+
+## 3. Iterator Interface
+
+```java
+public interface Iterator<T> {
+    boolean hasNext();
+    T next();
+}
+```
+
+---
+
+## 4. Aggregate Interface (Collection)
+
+```java
+public interface Aggregate<T> {
+    Iterator<T> createIterator();
+}
+```
+
+---
+
+## 5. Concrete Aggregate (Inventory)
+
+```java
+import java.util.ArrayList;
+import java.util.List;
+
+public class Inventory implements Aggregate<Item> {
+    private List<Item> items = new ArrayList<>();
+
+    public void addItem(Item item) {
+        items.add(item);
+    }
+
+    @Override
+    public Iterator<Item> createIterator() {
+        return new InventoryIterator(items);
+    }
+}
+```
+
+---
+
+## 6. Concrete Iterator
+
+```java
+import java.util.List;
+
+public class InventoryIterator implements Iterator<Item> {
+    private List<Item> items;
+    private int position = 0;
+
+    public InventoryIterator(List<Item> items) {
+        this.items = items;
+    }
+
+    @Override
+    public boolean hasNext() {
+        return position < items.size();
+    }
+
+    @Override
+    public Item next() {
+        return items.get(position++);
+    }
+}
+```
+
+---
+
+## 7. Item Interface and Concrete Items
+
+(We can reuse the `Item` setup from the Factory Pattern example)
+
+```java
+public interface Item {
+    void use();
+}
+
+public class Flashlight implements Item {
+    @Override
+    public void use() {
+        System.out.println("Shining the flashlight...");
+    }
+}
+
+public class Lockpick implements Item {
+    @Override
+    public void use() {
+        System.out.println("Picking a lock...");
+    }
+}
+```
+
+---
+
+## 8. Using the Iterator in the Game
+
+```java
+public class EscapeRoomGame {
+    public static void main(String[] args) {
+        Inventory inventory = new Inventory();
+
+        inventory.addItem(new Flashlight());
+        inventory.addItem(new Lockpick());
+
+        Iterator<Item> iterator = inventory.createIterator();
+
+        while (iterator.hasNext()) {
+            Item item = iterator.next();
+            item.use();
+        }
+    }
+}
+```
+
+---
+
+## 9. Sample Output
+
+```java
+Shining the flashlight...
+Picking a lock...
+```
+
+---
+
+## 10. Why is Iterator Useful in a Game?
+
+- **Encapsulation** → The player doesn’t know if inventory is an `ArrayList`, `LinkedList`, or something else.
+    
+- **Consistency** → You can traverse collections uniformly (items, puzzles, players).
+    
+- **Flexibility** → You could even implement **custom iterators** (e.g., iterate only over usable items, or only over unsolved puzzles).
+    
+
+---
+
+## 11. Next Step Ideas 💡
+
+- Create a **PuzzleCollection** that iterates through puzzles in order.
+    
+- Make a **ReverseIterator** (iterate items from last to first).
+    
+- Combine with the **Composite Pattern** to iterate through nested structures (e.g., rooms containing puzzles and items).
+    
+
+---
+
+✅ **Key Takeaway:**  
+The **Iterator Pattern** provides a clean way to **step through collections** in your escape room without exposing how they’re stored.

@@ -1,0 +1,253 @@
+---
+title: 🎮 Command Design Pattern
+description: Learn about the Command Design Pattern, its benefits, and how to implement it in your code.
+---
+
+import { Aside } from '@astrojs/starlight/components';
+
+## What is the Command Pattern?
+
+The **Command Pattern** is a **behavioral design pattern** that:
+
+- Encapsulates a **request/action** as an object.
+    
+- Lets you **parameterize methods with actions**, queue them, and support undo/redo.
+    
+- Decouples the **invoker** (e.g., game engine) from the **receiver** (e.g., player, puzzle, item).
+    
+<Aside type="caution" title='Key Idea' icon="star">
+  Think of it as turning **player actions** into "command objects" you can store, execute, and roll back.
+</Aside>
+
+---
+
+## 2. Escape Room Example Scenario
+
+Imagine your player can:
+
+- **Move** to a new room.
+    
+- **Pick up an item**.
+    
+- **Solve a puzzle**.
+    
+
+Each of these can be wrapped into a **Command** object.
+
+---
+
+## 3. Command Interface
+
+```java
+public interface Command {
+    void execute();
+    void undo();
+}
+```
+---
+
+## 4. Receivers (Game Objects)
+
+These are the actual game objects that commands act upon.
+
+```java
+// Player
+public class Player {
+    public void move(String direction) {
+        System.out.println("Player moves " + direction + ".");
+    }
+
+    public void pickUp(String item) {
+        System.out.println("Player picks up: " + item);
+    }
+}
+
+// Puzzle
+public class Puzzle {
+    private boolean solved = false;
+
+    public void solve() {
+        if (!solved) {
+            solved = true;
+            System.out.println("Puzzle solved!");
+        } else {
+            System.out.println("Puzzle is already solved.");
+        }
+    }
+
+    public void reset() {
+        if (solved) {
+            solved = false;
+            System.out.println("Puzzle reset.");
+        }
+    }
+}
+```
+
+---
+
+## 5. Concrete Commands
+
+```java
+// Move command
+public class MoveCommand implements Command {
+    private Player player;
+    private String direction;
+
+    public MoveCommand(Player player, String direction) {
+        this.player = player;
+        this.direction = direction;
+    }
+
+    @Override
+    public void execute() {
+        player.move(direction);
+    }
+
+    @Override
+    public void undo() {
+        String opposite = switch (direction) {
+            case "north" -> "south";
+            case "south" -> "north";
+            case "east"  -> "west";
+            case "west"  -> "east";
+            default -> "";
+        };
+        player.move(opposite);
+    }
+}
+
+// Pick up command
+public class PickUpCommand implements Command {
+    private Player player;
+    private String item;
+
+    public PickUpCommand(Player player, String item) {
+        this.player = player;
+        this.item = item;
+    }
+
+    @Override
+    public void execute() {
+        player.pickUp(item);
+    }
+
+    @Override
+    public void undo() {
+        System.out.println("Dropped: " + item);
+    }
+}
+
+// Solve puzzle command
+public class SolvePuzzleCommand implements Command {
+    private Puzzle puzzle;
+
+    public SolvePuzzleCommand(Puzzle puzzle) {
+        this.puzzle = puzzle;
+    }
+
+    @Override
+    public void execute() {
+        puzzle.solve();
+    }
+
+    @Override
+    public void undo() {
+        puzzle.reset();
+    }
+}
+```
+
+---
+
+## 6. Invoker (Game Engine)
+
+This is the "remote control" that executes commands and manages undo/redo.
+
+```java
+import java.util.Stack;
+
+public class GameEngine {
+    private Stack<Command> history = new Stack<>();
+
+    public void executeCommand(Command command) {
+        command.execute();
+        history.push(command);
+    }
+
+    public void undoLastCommand() {
+        if (!history.isEmpty()) {
+            Command lastCommand = history.pop();
+            lastCommand.undo();
+        } else {
+            System.out.println("No commands to undo.");
+        }
+    }
+}
+```
+
+---
+
+## 7. Using the Command Pattern in the Game
+
+```java
+public class EscapeRoomGame {
+    public static void main(String[] args) {
+        Player player = new Player();
+        Puzzle puzzle = new Puzzle();
+        GameEngine engine = new GameEngine();
+
+        // Execute commands
+        engine.executeCommand(new MoveCommand(player, "north"));
+        engine.executeCommand(new PickUpCommand(player, "Flashlight"));
+        engine.executeCommand(new SolvePuzzleCommand(puzzle));
+
+        // Undo last command
+        engine.undoLastCommand(); // Puzzle reset
+        engine.undoLastCommand(); // Dropped flashlight
+        engine.undoLastCommand(); // Player moves south (undo north)
+    }
+}
+```
+
+---
+
+## 8. Sample Output
+
+```
+Player moves north.
+Player picks up: Flashlight
+Puzzle solved!
+Puzzle reset.
+Dropped: Flashlight
+Player moves south.
+```
+
+---
+
+## 9. Why is Command Useful in a Game?
+
+- **Encapsulation of actions** → Each action is an object.
+    
+- **Undo/redo support** → Essential for puzzles, movement, or mistakes.
+    
+- **Flexible input handling** → Map commands to buttons, keyboard, or even scripts.
+    
+- **Command queue** → Schedule actions (e.g., animations, AI moves).
+    
+
+---
+
+## 10. Next Step Ideas 💡
+
+- Add **Redo functionality** with another stack.
+    
+- Combine with **Macro Commands** (e.g., a sequence of commands = “combo move”).
+    
+- Use in **multiplayer games** → log all commands for replay or networking sync.
+    
+
+---
+
+✅ **Key Takeaway:**  
+The **Command Pattern** transforms player actions into objects, making them **queueable, undoable, and flexible** — ideal for escape room mechanics where every move counts.

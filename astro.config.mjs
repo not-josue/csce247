@@ -100,6 +100,21 @@ export default defineConfig({
           label: "Singleton Design",
           items: [{ label: "Singleton Intro", slug: "singleton/intro" }],
         },
+        {
+          label: "Facade Design",
+          items: [{ label: "Facade Intro", slug: "facade/intro" }],
+        },
+        {
+          label: "Iterator Design",
+          items: [
+            { label: "Iterator Intro", slug: "iterator/intro" },
+            { label: "Puzzle Example", slug: "iterator/puzzle" },
+          ],
+        },
+        {
+          label: "Command Design",
+          items: [{ label: "Command Intro", slug: "command/intro" }],
+        },
       ],
     }),
   ],
