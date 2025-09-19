@@ -1,0 +1,152 @@
+---
+title: 🏭 Factory Design Pattern
+description: Learn about the Factory Design Pattern, its benefits, and how to implement it in your code.
+---
+
+import { Aside } from '@astrojs/starlight/components';
+
+The **Factory Method Pattern** is a **creational design pattern** that:
+
+- Defines an interface for creating objects.
+    
+- Lets subclasses decide which class to instantiate.
+    
+- Decouples the client code from the actual classes being created.
+    
+<Aside type="caution" title='Key Idea' icon="star">
+  Think of it as a **“puzzle/item generator”** — you ask the factory for an object, and it decides which one to give you.
+</Aside>
+
+---
+
+## Escape Room Example Scenario
+
+In your escape room:
+
+- You want to create different **puzzles** (`CipherPuzzle`, `RiddlePuzzle`, `LockPuzzle`).
+    
+- Instead of using `new CipherPuzzle()`, `new RiddlePuzzle()` everywhere, you use a **PuzzleFactory** to handle creation.
+    
+- This makes it easy to add new puzzle types without rewriting client code.
+    
+
+---
+
+## Puzzle Interface
+
+```java
+// Product interface
+public interface Puzzle {
+    void play();
+}
+```
+
+---
+
+## Concrete Puzzle Classes
+
+```java
+// Cipher puzzle
+public class CipherPuzzle implements Puzzle {
+    @Override
+    public void play() {
+        System.out.println("Decoding a mysterious cipher...");
+    }
+}
+
+// Riddle puzzle
+public class RiddlePuzzle implements Puzzle {
+    @Override
+    public void play() {
+        System.out.println("Solving a tricky riddle...");
+    }
+}
+
+// Lock puzzle
+public class LockPuzzle implements Puzzle {
+    @Override
+    public void play() {
+        System.out.println("Trying to pick the lock...");
+    }
+}
+```
+
+---
+
+## Puzzle Factory
+
+```java
+// Factory class
+public class PuzzleFactory {
+    public static Puzzle createPuzzle(String type) {
+        switch (type.toLowerCase()) {
+            case "cipher":
+                return new CipherPuzzle();
+            case "riddle":
+                return new RiddlePuzzle();
+            case "lock":
+                return new LockPuzzle();
+            default:
+                throw new IllegalArgumentException("Unknown puzzle type: " + type);
+        }
+    }
+}
+```
+
+---
+
+## Using the Factory in the Game
+
+```java
+public class EscapeRoomGame {
+    public static void main(String[] args) {
+        // Create puzzles via factory
+        Puzzle puzzle1 = PuzzleFactory.createPuzzle("cipher");
+        Puzzle puzzle2 = PuzzleFactory.createPuzzle("riddle");
+        Puzzle puzzle3 = PuzzleFactory.createPuzzle("lock");
+
+        puzzle1.play(); // "Decoding a mysterious cipher..."
+        puzzle2.play(); // "Solving a tricky riddle..."
+        puzzle3.play(); // "Trying to pick the lock..."
+    }
+}
+```
+
+---
+
+## Sample Output
+
+```
+Decoding a mysterious cipher...
+Solving a tricky riddle...
+Trying to pick the lock...
+```
+
+---
+
+## Why is this Useful in a Game?
+
+- **Centralized creation:** All puzzle creation is handled in one place.
+    
+- **Easy to extend:** Add a new `LaserPuzzle` → just add a case in `PuzzleFactory`.
+    
+- **Flexibility:** You can randomize puzzle generation (pick one at random for each room).
+    
+- **Decoupling:** The game doesn’t need to know about concrete puzzle classes.
+    
+
+---
+
+## Next Step Ideas 💡
+
+- Create an **ItemFactory** (flashlight, magnifying glass, lockpick).
+    
+- Use **Abstract Factory** to generate **whole rooms** (a set of puzzles + items).
+    
+- Combine with **Strategy Pattern** so that factory-created puzzles come with a solving strategy.
+    
+
+---
+
+✅ **Key Takeaway:**  
+The **Factory Pattern** centralizes and abstracts object creation, making it easier to manage puzzles, items, or rooms in your escape room game.

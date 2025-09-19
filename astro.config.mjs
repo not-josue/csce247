@@ -89,6 +89,17 @@ export default defineConfig({
             { label: "Game Example", slug: "state/game" },
           ],
         },
+        {
+          label: "Factory Design",
+          items: [
+            { label: "Factory Intro", slug: "factory/intro" },
+            { label: "Item Example", slug: "factory/items" },
+          ],
+        },
+        {
+          label: "Singleton Design",
+          items: [{ label: "Singleton Intro", slug: "singleton/intro" }],
+        },
       ],
     }),
   ],

@@ -1,0 +1,159 @@
+---
+title: 🏭 Item Factory Example
+description: An example of the Factory Method Pattern applied to creating items in a game.
+---
+
+**Factory in action:** Your escape room is full of items — flashlights, keys, lockpicks. Instead of hard-coding `new Flashlight()` or `new Key()` everywhere, a factory centralizes item creation.
+
+**Why it matters:** You get one place to manage logic, easy extensibility for new items, and flexibility to randomize or theme what players discover.
+
+## Scenario
+
+Your escape room has items that players can collect and use.  
+Examples:
+
+- **Flashlight** → light up dark rooms.
+    
+- **Magnifying Glass** → inspect hidden details.
+    
+- **Lockpick** → open locked doors.
+    
+- **Key** → unlock a specific door.
+    
+
+Instead of creating them directly with `new Flashlight()`, `new Key()`, etc., we’ll use an **ItemFactory** so item creation is centralized, flexible, and easily extendable.
+
+---
+
+## Item Interface
+
+```java
+// Product interface
+public interface Item {
+    void use();
+}
+```
+
+---
+
+## Concrete Item Classes
+
+```java
+public class Flashlight implements Item {
+    @Override
+    public void use() {
+        System.out.println("You shine the flashlight into the dark room.");
+    }
+}
+
+public class MagnifyingGlass implements Item {
+    @Override
+    public void use() {
+        System.out.println("You examine the clue closely with the magnifying glass.");
+    }
+}
+
+public class Lockpick implements Item {
+    @Override
+    public void use() {
+        System.out.println("You attempt to pick the lock...");
+    }
+}
+
+public class Key implements Item {
+    @Override
+    public void use() {
+        System.out.println("You insert the key into the lock and turn it.");
+    }
+}
+```
+
+---
+
+## Item Factory
+
+```java
+public class ItemFactory {
+    public static Item createItem(String type) {
+        switch (type.toLowerCase()) {
+            case "flashlight":
+                return new Flashlight();
+            case "magnifyingglass":
+                return new MagnifyingGlass();
+            case "lockpick":
+                return new Lockpick();
+            case "key":
+                return new Key();
+            default:
+                throw new IllegalArgumentException("Unknown item type: " + type);
+        }
+    }
+}
+```
+
+---
+
+## Using the Factory in the Game
+
+```java
+public class EscapeRoomGame {
+    public static void main(String[] args) {
+        // Create items dynamically via factory
+        Item item1 = ItemFactory.createItem("flashlight");
+        Item item2 = ItemFactory.createItem("magnifyingglass");
+        Item item3 = ItemFactory.createItem("lockpick");
+        Item item4 = ItemFactory.createItem("key");
+
+        // Use items
+        item1.use();
+        item2.use();
+        item3.use();
+        item4.use();
+    }
+}
+```
+
+---
+
+## Sample Output
+
+```
+You shine the flashlight into the dark room.
+You examine the clue closely with the magnifying glass.
+You attempt to pick the lock...
+You insert the key into the lock and turn it.
+```
+
+---
+
+## Why This is Useful
+
+- **Centralized item creation** → You only change code in one place if item logic changes.
+    
+- **Extensible** → Adding a new item (like “Crowbar”) means adding one class + one factory case.
+    
+- **Randomization** → Factory can return random items:
+    
+
+```java
+String[] items = {"flashlight", "magnifyingglass", "lockpick", "key"};
+Random rand = new Random();
+Item randomItem = ItemFactory.createItem(items[rand.nextInt(items.length)]);
+randomItem.use();
+```
+
+---
+
+## Next-Level Ideas 💡
+
+- Create a **RoomFactory** that builds a room with a puzzle + item combo.
+    
+- Use an **Abstract Factory** to produce themed sets (e.g., “Haunted Room Factory” → candle + ghost riddle).
+    
+- Combine with **Decorator Pattern** so that picking up a factory-generated item dynamically enhances the player’s abilities.
+    
+
+---
+
+✅ **Key Takeaway:**  
+The **Factory Pattern** is ideal for creating items in a structured and extensible way, keeping your escape room code clean and easy to expand with new objects.

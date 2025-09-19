@@ -1,0 +1,161 @@
+---
+title: 🧑‍💻 Singleton Design Pattern
+description: Learn about the Singleton Design Pattern, its benefits, and how to implement it in your code.
+---
+
+import { Aside } from '@astrojs/starlight/components';
+
+The **Singleton Pattern** is a **creational design pattern** that ensures:
+
+- A class has **only one instance**.
+    
+- That instance is **globally accessible**.
+    
+<Aside type="caution" title='Key Idea' icon="star">
+  Think of it like a **game manager** or **control room**: there’s only one, and everyone uses it.
+</Aside>
+
+---
+
+## Escape Room Example Scenario
+
+In your game, some objects should only exist **once**:
+
+- **GameManager** → controls the game flow, keeps score, manages time.
+    
+- **Settings** → stores configuration (sound, difficulty, etc.).
+    
+- **Logger** → records player actions.
+    
+<Aside type="caution" title='Key Idea' icon="star">
+  If we had multiple instances of these, it could cause chaos. That’s where Singleton helps.
+</Aside>
+
+
+---
+
+## Singleton Class (GameManager)
+
+```java
+public class GameManager {
+    // Step 1: private static instance
+    private static GameManager instance;
+
+    // Step 2: private constructor (prevents outside instantiation)
+    private GameManager() {
+        System.out.println("GameManager initialized.");
+    }
+
+    // Step 3: public method to get the instance
+    public static GameManager getInstance() {
+        if (instance == null) {
+            instance = new GameManager();
+        }
+        return instance;
+    }
+
+    // Example functionality
+    private int score = 0;
+
+    public void addScore(int points) {
+        score += points;
+        System.out.println("Score updated: " + score);
+    }
+
+    public int getScore() {
+        return score;
+    }
+}
+```
+
+---
+
+## Using the Singleton in the Game
+
+```java
+public class EscapeRoomGame {
+    public static void main(String[] args) {
+        // Get the one and only instance
+        GameManager gm1 = GameManager.getInstance();
+        gm1.addScore(10);
+
+        GameManager gm2 = GameManager.getInstance();
+        gm2.addScore(20);
+
+        // Both gm1 and gm2 are the SAME instance
+        System.out.println("Final Score: " + gm1.getScore());
+    }
+}
+```
+
+---
+
+## Sample Output
+
+```
+GameManager initialized.
+Score updated: 10
+Score updated: 30
+Final Score: 30
+```
+
+Notice:
+
+- The `GameManager` was initialized only once.
+    
+- Both references (`gm1`, `gm2`) pointed to the same instance.
+    
+
+---
+
+## Thread-Safe Singleton (Optional Upgrade)
+
+In a multi-threaded game, we need to ensure only one instance is created even if multiple threads request it simultaneously.
+
+```java
+public class GameManager {
+    private static volatile GameManager instance;
+
+    private GameManager() {}
+
+    public static GameManager getInstance() {
+        if (instance == null) {
+            synchronized (GameManager.class) {
+                if (instance == null) {
+                    instance = new GameManager();
+                }
+            }
+        }
+        return instance;
+    }
+}
+```
+
+This is the **double-checked locking** approach.
+
+---
+
+## Why is Singleton Useful in a Game?
+
+- **Global access point** (all parts of the game can reference one manager).
+    
+- **Consistency** (one score, one timer, one config).
+    
+- **Memory efficiency** (avoids creating unnecessary duplicate objects).
+    
+
+---
+
+## Next Step Ideas 💡
+
+- Use Singleton for **TimerManager** (only one countdown timer per game).
+    
+- Use Singleton for **SoundManager** (global control of sound effects).
+    
+- Combine with **Observer Pattern** → GameManager notifies observers (UI, players) about game events.
+    
+
+---
+
+✅ **Key Takeaway:**  
+The **Singleton Pattern** ensures there’s exactly **one instance** of a class, making it perfect for global managers like `GameManager`, `Logger`, or `Settings` in your escape room.
