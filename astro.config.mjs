@@ -18,6 +18,7 @@ export default defineConfig({
         dark: "./src/assets/logos/logo-dark.svg",
         alt: "CSCE 247 Logo",
       },
+      credits: true,
       head: [
         // Favicons
         {
