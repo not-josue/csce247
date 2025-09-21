@@ -18,56 +18,58 @@
 
 - [x] Choose font family for main + code
 
-## Pages (w/ UMLs)
+## Pages
 
 - [x] Index
 
 ### Introduction
 
-- [ ] Intro
+- [x] Intro
 
 ### Strategy Design Pattern
 
-- [ ] Basic Intro
+- [x] Basic Intro
 
 ### Observer Design Pattern
 
-- [ ] Basic Intro
+- [x] Basic Intro
 
-- [ ] Timer Example
+- [x] Timer Example
 
 ### Decorator Design Pattern
 
-- [ ] Basic Intro
+- [x] Basic Intro
 
 ### State Design Pattern
 
-- [ ] Basic Intro
+- [x] Basic Intro
 
-- [ ] Puzzle Example
+- [x] Puzzle Example
 
-- [ ] Game State
+- [x] Game State
 
 ### Factory Design Pattern
 
-- [ ] Basic Intro
+- [x] Basic Intro
 
-- [ ] Items Example
+- [x] Items Example
 
 ### Singleton Design Pattern
 
-- [ ] Basic Intro
+- [x] Basic Intro
 
 ### Facade Design Pattern
 
-- [ ] Basic Intro
+- [x] Basic Intro
+
+- [x] Facade With Singletons
 
 ### Iterator Design Pattern
 
-- [ ] Basic Intro
+- [x] Basic Intro
 
-- [ ] Puzzle Collection
+- [x] Puzzle Collection
 
 ### Command Design Pattern
 
-- [ ] Basic Intro
+- [x] Basic Intro

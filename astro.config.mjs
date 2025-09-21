@@ -103,7 +103,10 @@ export default defineConfig({
         },
         {
           label: "Facade Design",
-          items: [{ label: "Facade Intro", slug: "facade/intro" }],
+          items: [
+            { label: "Facade Intro", slug: "facade/intro" },
+            { label: "Managers Example", slug: "facade/example" },
+          ],
         },
         {
           label: "Iterator Design",

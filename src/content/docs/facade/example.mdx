@@ -1,0 +1,227 @@
+---
+title: 🎭 Facade With 🧑‍💻 Singleton Managers Example
+description: An example of using the Facade pattern with manager classes to simplify complex subsystems.
+---
+
+**Facade in action:** Escape rooms have lots of moving parts — music, sound effects, items, characters. Managing each system directly clutters your code.
+
+**Why it matters:** By making each manager a Singleton and wrapping them in a Facade, the game gets one simple interface. That means organized systems, cleaner code, and easy extensions down the road.
+
+## Concept
+
+- Each **Manager** (music, sounds, characters, items) is a **Singleton** → only one exists.
+    
+- A **Facade** provides a simple interface to interact with all of them.
+    
+- The game doesn’t need to know about each manager — just calls the **Facade**.
+    
+
+---
+
+## MusicManager (Singleton)
+
+```java
+public class MusicManager {
+    private static MusicManager instance;
+    private MusicManager() {}
+
+    public static MusicManager getInstance() {
+        if (instance == null) {
+            instance = new MusicManager();
+        }
+        return instance;
+    }
+
+    public void playBackgroundTrack(String track) {
+        System.out.println("🎵 Playing background music: " + track);
+    }
+
+    public void stopMusic() {
+        System.out.println("🛑 Music stopped.");
+    }
+}
+```
+
+---
+
+## SoundEffectManager (Singleton)
+
+```java
+public class SoundEffectManager {
+    private static SoundEffectManager instance;
+    private SoundEffectManager() {}
+
+    public static SoundEffectManager getInstance() {
+        if (instance == null) {
+            instance = new SoundEffectManager();
+        }
+        return instance;
+    }
+
+    public void playEffect(String effect) {
+        System.out.println("🔊 Playing sound effect: " + effect);
+    }
+}
+```
+
+---
+
+## CharacterManager (Singleton)
+
+```java
+import java.util.ArrayList;
+import java.util.List;
+
+public class CharacterManager {
+    private static CharacterManager instance;
+    private List<String> characters = new ArrayList<>();
+
+    private CharacterManager() {}
+
+    public static CharacterManager getInstance() {
+        if (instance == null) {
+            instance = new CharacterManager();
+        }
+        return instance;
+    }
+
+    public void addCharacter(String character) {
+        characters.add(character);
+        System.out.println("👤 Added character: " + character);
+    }
+
+    public void listCharacters() {
+        System.out.println("👥 Current characters: " + characters);
+    }
+}
+```
+
+---
+
+## ItemManager (Singleton)
+
+```java
+import java.util.ArrayList;
+import java.util.List;
+
+public class ItemManager {
+    private static ItemManager instance;
+    private List<String> items = new ArrayList<>();
+
+    private ItemManager() {}
+
+    public static ItemManager getInstance() {
+        if (instance == null) {
+            instance = new ItemManager();
+        }
+        return instance;
+    }
+
+    public void addItem(String item) {
+        items.add(item);
+        System.out.println("📦 Added item: " + item);
+    }
+
+    public void listItems() {
+        System.out.println("🎒 Current items: " + items);
+    }
+}
+```
+
+---
+
+## Facade (GameFacade)
+
+This facade makes it **easy** to use all managers without needing to touch them directly.
+
+```java
+public class GameFacade {
+    private MusicManager musicManager = MusicManager.getInstance();
+    private SoundEffectManager soundManager = SoundEffectManager.getInstance();
+    private CharacterManager characterManager = CharacterManager.getInstance();
+    private ItemManager itemManager = ItemManager.getInstance();
+
+    public void startGame() {
+        musicManager.playBackgroundTrack("escape_theme.mp3");
+        characterManager.addCharacter("Player");
+        itemManager.addItem("Flashlight");
+        System.out.println("🚪 Escape Room started!");
+    }
+
+    public void solvePuzzle() {
+        soundManager.playEffect("puzzle_solved.wav");
+        itemManager.addItem("Key");
+        System.out.println("✅ Puzzle solved! A key has been added to your inventory.");
+    }
+
+    public void endGame() {
+        musicManager.stopMusic();
+        soundManager.playEffect("victory_fanfare.wav");
+        System.out.println("🏆 Game completed!");
+        characterManager.listCharacters();
+        itemManager.listItems();
+    }
+}
+```
+
+---
+
+## Using the Facade in the Game
+
+```java
+public class EscapeRoomGame {
+    public static void main(String[] args) {
+        GameFacade game = new GameFacade();
+
+        game.startGame();     // Starts background music, adds player and flashlight
+        game.solvePuzzle();   // Plays puzzle sound, adds key
+        game.endGame();       // Stops music, plays victory sound, shows summary
+    }
+}
+```
+
+---
+
+## Sample Output
+
+```java
+🎵 Playing background music: escape_theme.mp3
+👤 Added character: Player
+📦 Added item: Flashlight
+🚪 Escape Room started!
+🔊 Playing sound effect: puzzle_solved.wav
+📦 Added item: Key
+✅ Puzzle solved! A key has been added to your inventory.
+🛑 Music stopped.
+🔊 Playing sound effect: victory_fanfare.wav
+🏆 Game completed!
+👥 Current characters: [Player]
+🎒 Current items: [Flashlight, Key]
+```
+
+---
+
+## Why This is Useful
+
+- **Singleton Managers** ensure consistency (only one music system, one inventory, etc.).
+    
+- **Facade** provides a **clean, simple API** for the game — no need to call each manager separately.
+    
+- **Extensible**: If you add a `LightingManager` later, you just extend the Facade, not the game logic.
+    
+
+---
+
+## Next Step Ideas 💡
+
+- Add a **Pause/Resume** system in the facade (pause music, freeze characters).
+    
+- Combine with **Observer Pattern** so managers notify UI when things change.
+    
+- Use **Factory Pattern** to create items and characters inside the managers.
+    
+
+---
+
+✅ **Key Takeaway:**  
+By combining **Singleton Managers** with a **Facade**, you get **organized global systems** and a **simple interface** for controlling them — perfect for your escape room’s audio, characters, and items.
